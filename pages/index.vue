@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { data } = await useAsyncData("data", async () => {
+const { data } = await useAsyncData("categories", async () => {
     const [trending, popular, upcoming] = await Promise.all([
         await $fetch("/api/trending?page=1&per=8"),
         await $fetch("/api/popular?page=1&per=8"),

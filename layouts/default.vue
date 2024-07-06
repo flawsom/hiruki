@@ -2,6 +2,7 @@
 </script>
 
 <template>
+    <NuxtLoadingIndicator color="#ADC6FF" />
     <div class="space-y-8 select-none">
         <Header />
         <slot />

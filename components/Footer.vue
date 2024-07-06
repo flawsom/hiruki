@@ -3,7 +3,7 @@
 
 <template>
     <div class="flex flex-col">
-        <div class="bg-light/5 flex flex-col md:flex-row justify-between md:items-center gap-4 p-4">
+        <div class="bg-prime/5 flex flex-col md:flex-row justify-between md:items-center gap-4 p-4">
             <div class="flex flex-col">
                 <p class="text-prime text-3xl font-extrabold">Hiruki</p>
                 <p class="text-light/75 text-sm font-light md:w-96">This site does not store any files on our server, we
