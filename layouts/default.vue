@@ -3,6 +3,7 @@
 
 <template>
     <div class="space-y-8">
+        <Header />
         <slot />
         <Footer />
     </div>
