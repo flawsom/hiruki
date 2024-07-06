@@ -16,9 +16,9 @@ const { data, category } = defineProps(["data", "category"]);
                 <div class="bg-gradient-to-t from-dark to-transparent absolute inset-0 
                     group-hover:from-dark/95" />
                 <div class="absolute bottom-0 left-0 p-1">
-                    <p class="text-light text-base font-normal line-clamp-2 group-hover:text-prime">
+                    <p class="text-light text-base font-normal line-clamp-3 group-hover:text-prime">
                         {{ anime.title }}</p>
-                    <p class="text-light/75 text-sm font-normal">{{ anime.format }} - {{ anime.year }}</p>
+                    <p class="text-light/75 text-sm font-normal">{{ anime.season }} {{ anime.year }}</p>
                 </div>
             </NuxtLink>
         </div>
