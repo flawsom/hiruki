@@ -10,24 +10,9 @@ const { data } = await useAsyncData("data", async () => {
 </script>
 
 <template>
-    <div class="space-y-8">
-        <div class="space-y-4 select-none m-4">
-            <Section value="Trending Now" />
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
-                <Card v-for="anime in data.trending.data" :data="anime" />
-            </div>
-        </div>
-        <div class="space-y-4 select-none m-4">
-            <Section value="All Time Popular" />
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
-                <Card v-for="anime in data.popular.data" :data="anime" />
-            </div>
-        </div>
-        <div class="space-y-4 select-none m-4">
-            <Section value="Upcoming Next Season" />
-            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
-                <Card v-for="anime in data.upcoming.data" :data="anime" />
-            </div>
-        </div>
+    <div class="space-y-8 m-4">
+        <Section :data="data.trending" :category="1" />
+        <Section :data="data.popular" :category="2" />
+        <Section :data="data.upcoming" :category="3" />
     </div>
 </template>

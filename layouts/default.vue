@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <div class="space-y-8">
+    <div class="space-y-8 select-none">
         <Header />
         <slot />
         <Footer />
