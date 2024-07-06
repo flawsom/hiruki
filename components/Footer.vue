@@ -6,7 +6,7 @@
         <div class="bg-light/5 flex flex-col md:flex-row justify-between md:items-center gap-4 p-4">
             <div class="flex flex-col">
                 <p class="text-prime text-3xl font-extrabold">Hiruki</p>
-                <p class="text-light/75 text-sm font-light w-96">This site does not store any files on our server, we
+                <p class="text-light/75 text-sm font-light md:w-96">This site does not store any files on our server, we
                     only linked to the media which is hosted on 3rd party services.</p>
             </div>
             <div class="flex flex-col gap-2">
