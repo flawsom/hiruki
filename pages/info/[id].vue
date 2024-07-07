@@ -104,8 +104,8 @@ const { data } = await useAsyncData("info", async () => {
                     class="w-full h-full rounded-sm object-cover" />
                 <div class="bg-gradient-to-t from-dark to-transparent absolute inset-0 
                     group-hover:from-dark/95" />
-                <div class="absolute bottom-0 left-0 p-1">
-                    <p class="text-light text-base font-normal line-clamp-3 group-hover:text-prime">
+                <div class="absolute bottom-0 left-0 p-2">
+                    <p class="text-light text-sm font-medium line-clamp-2 group-hover:text-prime">
                         {{ anime.title }}</p>
                     <p class="text-light/75 text-sm font-normal">{{ anime.season }} {{ anime.year }}</p>
                 </div>
