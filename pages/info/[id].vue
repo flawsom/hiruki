@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 const route = useRoute();
 const { data } = await useAsyncData("info", async () => {
-    const [info, recommendations] = await Promise.all([
+    const [info, recommendations, episodes] = await Promise.all([
         await $fetch(`/api/info?id=${route.params.id}`),
-        await $fetch(`/api/recommendations?id=${route.params.id}`)
+        await $fetch(`/api/recommendations?id=${route.params.id}`),
+        await $fetch(`/api/episodes?id=${route.params.id}`)
     ]);
-    return { info, recommendations }
+    return { info, recommendations, episodes }
 });
 </script>
 
@@ -13,6 +14,11 @@ const { data } = await useAsyncData("info", async () => {
     <div class="grid grid-cols-1 lg:grid-cols-[auto,1fr] gap-8 m-4">
         <div class="hidden lg:flex flex-col gap-2">
             <img :src="data?.info.cover" :alt="data?.info.title" class="w-56 h-80 rounded-sm object-cover">
+            <NuxtLink :to="'/stream/' + data?.episodes.episodes[0].id" class="text-dark bg-prime text-base 
+            font-medium text-center outline-none rounded-sm p-2 hover:bg-prime/85"
+                v-if="data?.episodes.episodes.length > 0">Watch Now</NuxtLink>
+            <button type="button" class="text-dark bg-prime/50 text-base font-medium text-center outline-none 
+            rounded-sm p-2 hover:cursor-not-allowed" v-else>Watch Now</button>
         </div>
         <div class="lg:hidden flex flex-col items-center gap-2">
             <img :src="data?.info.cover" :alt="data?.info.title"
@@ -21,6 +27,11 @@ const { data } = await useAsyncData("info", async () => {
                 <p class="text-light text-base font-normal">{{ data?.info.season }} {{ data?.info.year }}</p>
                 <p class="text-light text-2xl font-bold line-clamp-3">{{ data?.info.title }}</p>
             </div>
+            <NuxtLink :to="'/stream/' + data?.episodes.episodes[0].id" class="text-dark bg-prime text-base 
+            font-medium text-center w-full outline-none rounded-sm p-2 hover:bg-prime/85"
+                v-if="data?.episodes.episodes.length > 0">Watch Now</NuxtLink>
+            <button type="button" class="text-dark bg-prime/50 text-base font-medium text-center w-full 
+            outline-none rounded-sm p-2 hover:cursor-not-allowed" v-else>Watch Now</button>
         </div>
         <div class="flex flex-col gap-2">
             <div class="hidden lg:flex flex-col">
@@ -71,7 +82,8 @@ const { data } = await useAsyncData("info", async () => {
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-2">
                     <div v-for="character in data?.info.characters.slice(0, 9)"
                         class="flex items-center gap-2 rounded-sm">
-                        <NuxtImg :src="character.image" :alt="character.name" class="w-24 h-24 rounded-full object-cover" />
+                        <NuxtImg :src="character.image" :alt="character.name"
+                            class="w-24 h-24 rounded-full object-cover" />
                         <div class="flex flex-col gap-1 p-2">
                             <p class="text-light text-base font-normal">{{ character.name }}</p>
                             <p class="text-dark bg-prime w-fit outline-none rounded-sm px-2">{{ character.role }}</p>
