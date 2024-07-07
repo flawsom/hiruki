@@ -49,7 +49,8 @@ const { data } = await useAsyncData("info", async () => {
                 <div class="space-y-2">
                     <div class="bg-prime/5 space-y-1 rounded-sm p-4">
                         <p class="text-light text-lg font-semibold">Score</p>
-                        <p class="text-light/75 text-base font-normal" v-if="data?.info.score">{{ data?.info.score }}</p>
+                        <p class="text-light/75 text-base font-normal" v-if="data?.info.score">{{ data?.info.score }}
+                        </p>
                         <p class="text-light/75 text-base font-normal" v-else>N/A</p>
                     </div>
                     <div class="bg-prime/5 space-y-1 rounded-sm p-4">
@@ -64,6 +65,19 @@ const { data } = await useAsyncData("info", async () => {
                 <p class="text-light text-lg font-semibold">Studio</p>
                 <p class="text-light/75 text-base font-normal" v-if="data?.info.studio">{{ data?.info.studio }}</p>
                 <p class="text-light/75 text-base font-normal" v-else>N/A</p>
+            </div>
+            <div class="bg-prime/5 space-y-2 rounded-sm p-4">
+                <p class="text-light text-lg font-semibold">Characters</p>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-2">
+                    <div v-for="character in data?.info.characters.slice(0, 9)"
+                        class="flex items-center gap-2 rounded-sm">
+                        <NuxtImg :src="character.image" :alt="character.name" class="w-24 h-24 rounded-full object-cover" />
+                        <div class="flex flex-col gap-1 p-2">
+                            <p class="text-light text-base font-normal">{{ character.name }}</p>
+                            <p class="text-dark bg-prime w-fit outline-none rounded-sm px-2">{{ character.role }}</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
