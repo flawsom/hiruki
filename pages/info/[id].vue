@@ -31,7 +31,7 @@ const { data } = await useAsyncData("info", async () => {
             font-medium text-center w-full outline-none rounded-sm p-2 hover:bg-prime/85"
                 v-if="data?.episodes.episodes.length > 0">Watch Now</NuxtLink>
             <button type="button" class="text-dark bg-prime/50 text-base font-medium text-center w-full 
-            outline-none rounded-sm p-2 hover:cursor-not-allowed" v-else>Watch Now</button>
+            outline-none rounded-sm p-2 hover:cursor-not-allowed" v-else>Not Available</button>
         </div>
         <div class="flex flex-col gap-2">
             <div class="hidden lg:flex flex-col">
@@ -93,18 +93,20 @@ const { data } = await useAsyncData("info", async () => {
             </div>
             <div class="bg-prime/5 space-y-2 rounded-sm p-4">
                 <p class="text-light text-lg font-semibold">Episodes</p>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 max-h-[310px] overflow-y-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 max-h-[310px] overflow-y-auto"
+                    v-if="data?.episodes.episodes.length > 0">
                     <NuxtLink v-for="episode in data?.episodes.episodes" :to="'/stream/' + episode.id"
-                        class="flex items-start gap-2 rounded-sm hover:bg-prime/10"
-                        v-if="data?.episodes.episodes.length > 0">
-                        <NuxtImg :src="data?.info.cover" :alt="data?.info.title"
-                            class="h-24 rounded-sm object-cover" />
+                        class="flex items-start gap-2 rounded-sm hover:bg-prime/10">
+                        <NuxtImg :src="data?.info.cover" :alt="data?.info.title" class="h-24 rounded-sm object-cover" />
                         <div class="flex flex-col gap-1 p-2">
                             <p class="text-light text-base font-normal line-clamp-2">{{ data?.info.title }}</p>
                             <p class="text-dark bg-prime w-fit outline-none rounded-sm px-2">
                                 Episode {{ episode.episode }}</p>
                         </div>
                     </NuxtLink>
+                </div>
+                <div class="flex justify-center items-center h-32" v-else>
+                    <p class="text-prime text-xl font-semibold">Not Available</p>
                 </div>
             </div>
         </div>
