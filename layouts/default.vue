@@ -18,4 +18,16 @@
 body {
     @apply bg-background
 }
+
+::-webkit-scrollbar {
+    @apply w-[5px]
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-prime rounded-md hover:bg-prime/75
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-transparent
+}
 </style>
