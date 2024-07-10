@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-    modules: ["@nuxt/image", "@nuxtjs/tailwindcss", "@nuxtjs/google-fonts", "nuxt-icon"],
+    modules: ["@nuxt/image", "@nuxtjs/tailwindcss", "@nuxtjs/google-fonts", "nuxt-feather-icons"],
     devtools: { enabled: true },
     tailwindcss: { viewer: false },
     googleFonts: {
