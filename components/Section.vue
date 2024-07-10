@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-const { data, category } = defineProps(["data", "category"]);
+const { data, category, explorer } = defineProps(["data", "category", "explorer"]);
 </script>
 
 <template>
@@ -19,6 +19,16 @@ const { data, category } = defineProps(["data", "category"]);
                     <p class="text-light text-sm font-medium line-clamp-2 group-hover:text-prime">
                         {{ anime.title }}</p>
                     <p class="text-light/75 text-sm font-normal">{{ anime.season }} {{ anime.year }}</p>
+                </div>
+            </NuxtLink>
+            <NuxtLink :to="category === 1 ? '/trending' : category === 2 ? '/popular' : category === 3
+                ? '/upcoming' : category === 4 ? '/favorite' : category === 5 ? '/movies' : '/'" v-if="explorer"
+                class="relative bg-prime/10 rounded-sm hover:bg-prime/15">
+                <div class="absolute inset-0 flex flex-col justify-center items-center">
+                    <button type="button" class="text-light">
+                        <PlusCircleIcon size="1.2x" />
+                    </button>
+                    <p class="text-light">View More</p>
                 </div>
             </NuxtLink>
         </div>

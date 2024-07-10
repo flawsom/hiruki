@@ -11,8 +11,8 @@ const { data } = await useAsyncData("categories", async () => {
 
 <template>
     <div class="space-y-8 m-4">
-        <Section :data="data?.trending" :category="1" />
-        <Section :data="data?.popular" :category="2" />
-        <Section :data="data?.upcoming" :category="3" />
+        <Section :data="data?.trending" :category="1" :explorer="false" />
+        <Section :data="data?.popular" :category="2" :explorer="false" />
+        <Section :data="data?.upcoming" :category="3" :explorer="false" />
     </div>
 </template>
