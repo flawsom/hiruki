@@ -9,7 +9,6 @@ const { data } = await useAsyncData("info", async () => {
     ]);
     return { info, recommendations, episodes }
 });
-console.log(data.value?.info);
 const bookmarks = useStorage("bookmarks", { data: [] });
 const isBookmarked = () => {
     return bookmarks.value.data.find((item: any) => item.id == route.params.id) !== undefined
