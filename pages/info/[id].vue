@@ -9,6 +9,7 @@ const { data } = await useAsyncData("info", async () => {
     ]);
     return { info, recommendations, episodes }
 });
+console.log(data.value?.info);
 const bookmarks = useStorage("bookmarks", { data: [] });
 const isBookmarked = () => {
     return bookmarks.value.data.find((item: any) => item.id == route.params.id) !== undefined
@@ -88,7 +89,9 @@ const removeBookmark = () => {
                 <div class="space-y-2">
                     <div class="bg-prime/5 space-y-1 rounded-sm p-4">
                         <p class="text-light text-lg font-semibold">Format</p>
-                        <p class="text-light/75 text-base font-normal">{{ data?.info.format }}</p>
+                        <p class="text-light/75 text-base font-normal" v-if="data?.info.format">
+                            {{ data?.info.format }}</p>
+                        <p class="text-light/75 text-base font-normal" v-else>N/A</p>
                     </div>
                     <div class="bg-prime/5 space-y-1 rounded-sm p-4">
                         <p class="text-light text-lg font-semibold">Status</p>
@@ -117,7 +120,7 @@ const removeBookmark = () => {
             </div>
             <div class="bg-prime/5 space-y-2 rounded-sm p-4">
                 <p class="text-light text-lg font-semibold">Characters</p>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-2">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-2" v-if="data?.info.characters.length > 0">
                     <div v-for="character in data?.info.characters.slice(0, 9)"
                         class="flex items-center gap-2 rounded-sm">
                         <NuxtImg :src="character.image" :alt="character.name"
@@ -127,6 +130,9 @@ const removeBookmark = () => {
                             <p class="text-dark bg-prime w-fit outline-none rounded-sm px-2">{{ character.role }}</p>
                         </div>
                     </div>
+                </div>
+                <div class="flex justify-center items-center h-32" v-else>
+                    <p class="text-prime text-xl font-semibold">Not Available</p>
                 </div>
             </div>
             <div class="bg-prime/5 space-y-2 rounded-sm p-4">
