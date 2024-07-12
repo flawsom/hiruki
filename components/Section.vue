@@ -49,7 +49,7 @@ const clearBookmarks = () => {
                 </div>
             </NuxtLink>
         </div>
-        <div class="flex justify-between items-center" v-show="pagination">
+        <div class="flex justify-between items-center" v-if="data.pagination" v-show="pagination">
             <NuxtLink :to="category === 1 ? `/trending/${data.pagination.currentPage - 1}`
                 : category === 2 ? `/popular/${data.pagination.currentPage - 1}`
                     : category === 3 ? `/upcoming/${data.pagination.currentPage - 1}`
