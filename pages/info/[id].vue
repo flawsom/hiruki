@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { useStorage } from "@vueuse/core";
 const route = useRoute();
 const { data } = await useAsyncData("info", async () => {
     const [info, recommendations, episodes] = await Promise.all([
@@ -8,17 +9,45 @@ const { data } = await useAsyncData("info", async () => {
     ]);
     return { info, recommendations, episodes }
 });
+const bookmarks = useStorage("bookmarks", { data: [] });
+const isBookmarked = () => {
+    return bookmarks.value.data.find((item: any) => item.id == route.params.id) !== undefined
+}
+const addBookmark = () => {
+    const list: any = bookmarks.value
+    list.data.push({
+        id: data.value?.info.id,
+        title: data.value?.info.title,
+        cover: data.value?.info.cover,
+        season: data.value?.info.season,
+        year: data.value?.info.year
+    });
+}
+const removeBookmark = () => {
+    const list = bookmarks.value;
+    const index = list.data.findIndex((item: any) => item.id == route.params.id);
+    list.data.splice(index, 1);
+}
 </script>
 
 <template>
     <div class="grid grid-cols-1 lg:grid-cols-[auto,1fr] gap-8 m-4">
         <div class="hidden lg:flex flex-col gap-2">
             <img :src="data?.info.cover" :alt="data?.info.title" class="w-56 h-80 rounded-sm object-cover">
+            <button type="button" @click="removeBookmark" class="flex justify-center items-center text-dark bg-prime 
+            text-base font-medium text-center outline-none rounded-sm gap-2 p-2 hover:bg-prime/85"
+                v-if="isBookmarked()">
+                <BookmarkIcon />Bookmarked
+            </button>
+            <button type="button" @click="addBookmark" class="flex justify-center items-center text-dark bg-prime 
+            text-base font-medium text-center outline-none rounded-sm gap-2 p-2 hover:bg-prime/85" v-else>
+                <BookmarkIcon />Bookmark
+            </button>
             <NuxtLink :to="'/stream/' + data?.episodes.episodes[0].id" class="text-dark bg-prime text-base 
-            font-medium text-center outline-none rounded-sm p-2 hover:bg-prime/85"
+                font-medium text-center outline-none rounded-sm w-full p-2 hover:bg-prime/85"
                 v-if="data?.episodes.episodes.length > 0">Watch Now</NuxtLink>
             <button type="button" class="text-dark bg-prime/50 text-base font-medium text-center outline-none 
-            rounded-sm p-2 hover:cursor-not-allowed" v-else>Not Available</button>
+                rounded-sm w-full p-2 hover:cursor-not-allowed" v-else>Not Available</button>
         </div>
         <div class="lg:hidden flex flex-col items-center gap-2">
             <img :src="data?.info.cover" :alt="data?.info.title"
@@ -27,6 +56,15 @@ const { data } = await useAsyncData("info", async () => {
                 <p class="text-light text-base font-normal">{{ data?.info.season }} {{ data?.info.year }}</p>
                 <p class="text-light text-2xl font-bold line-clamp-3">{{ data?.info.title }}</p>
             </div>
+            <button type="button" @click="removeBookmark" class="flex justify-center items-center text-dark bg-prime 
+            text-base font-medium text-center w-full outline-none rounded-sm gap-2 p-2 hover:bg-prime/85"
+                v-if="isBookmarked()">
+                <BookmarkIcon />Bookmarked
+            </button>
+            <button type="button" @click="addBookmark" class="flex justify-center items-center text-dark bg-prime 
+            text-base font-medium text-center w-full outline-none rounded-sm gap-2 p-2 hover:bg-prime/85" v-else>
+                <BookmarkIcon />Bookmark
+            </button>
             <NuxtLink :to="'/stream/' + data?.episodes.episodes[0].id" class="text-dark bg-prime text-base 
             font-medium text-center w-full outline-none rounded-sm p-2 hover:bg-prime/85"
                 v-if="data?.episodes.episodes.length > 0">Watch Now</NuxtLink>

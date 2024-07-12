@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { useStorage } from "@vueuse/core";
+useStorage("bookmarks", { data: [] });
 </script>
 
 <template>
