@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useStorage } from "@vueuse/core";
-const { data, category, explorer } = defineProps(["data", "category", "explorer"]);
+const { data, category, explorer, pagination } = defineProps(["data", "category", "explorer", "pagination"]);
 const bookmarks = useStorage("bookmarks", { data: [] });
 const clearBookmarks = () => {
     bookmarks.value = { data: [] }
@@ -16,8 +16,8 @@ const clearBookmarks = () => {
                         category === 7 ? "Search Results" : "Unknown" }}</p>
             <button type="button" @click="clearBookmarks" class="text-light text-base font-normal 
             hover:text-prime" v-if="category === 6">Clear All</button>
-            <NuxtLink :to="category === 1 ? '/trending' : category === 2 ? '/popular' : category === 3
-                ? '/upcoming' : category === 4 ? '/favorite' : category === 5 ? '/movies' : '/'" class="text-light 
+            <NuxtLink :to="category === 1 ? '/trending/1' : category === 2 ? '/popular/1' : category === 3
+                ? '/upcoming/1' : category === 4 ? '/favorite/1' : category === 5 ? '/movies/1' : '/'" class="text-light 
                 text-base font-normal hover:text-prime" v-if="explorer">View More</NuxtLink>
         </div>
         <div :class="`flex justify-center items-center ${category === 6 || 7 ? 'h-72' : 'h-44'}`"
@@ -38,8 +38,8 @@ const clearBookmarks = () => {
                     <p class="text-light/75 text-sm font-normal">{{ anime.season }} {{ anime.year }}</p>
                 </div>
             </NuxtLink>
-            <NuxtLink :to="category === 1 ? '/trending' : category === 2 ? '/popular' : category === 3
-                ? '/upcoming' : category === 4 ? '/favorite' : category === 5 ? '/movies' : '/'" v-if="explorer"
+            <NuxtLink :to="category === 1 ? '/trending/1' : category === 2 ? '/popular/1' : category === 3
+                ? '/upcoming/1' : category === 4 ? '/favorite/1' : category === 5 ? '/movies/1' : '/'" v-if="explorer"
                 class="relative bg-prime/10 rounded-sm hover:bg-prime/15">
                 <div class="absolute inset-0 flex flex-col justify-center items-center">
                     <button type="button" class="text-light">
@@ -48,6 +48,41 @@ const clearBookmarks = () => {
                     <p class="text-light">View More</p>
                 </div>
             </NuxtLink>
+        </div>
+        <div class="flex justify-between items-center" v-show="pagination">
+            <NuxtLink :to="category === 1 ? `/trending/${data.pagination.currentPage - 1}`
+                : category === 2 ? `/popular/${data.pagination.currentPage - 1}`
+                    : category === 3 ? `/upcoming/${data.pagination.currentPage - 1}`
+                        : category === 4 ? `/favorite/${data.pagination.currentPage - 1}`
+                            : category === 5 ? `/movies/${data.pagination.currentPage - 1}` : '/'" class="flex 
+                            justify-center items-center text-dark bg-prime 
+                            outline-none rounded-sm w-28 gap-2 p-1 hover:bg-prime/85"
+                v-if="data.pagination.currentPage > 1">
+                <ChevronLeftIcon size="1.2x" />
+                Previous
+            </NuxtLink>
+            <button type="button" class="flex justify-center items-center text-dark bg-prime/50 outline-none rounded-sm 
+            w-28 gap-2 p-1 hover:cursor-not-allowed" v-else>
+                <ChevronLeftIcon size="1.2x" />
+                Previous
+            </button>
+            <p class="text-light text-base font-medium">Page {{ data.pagination.currentPage }}</p>
+            <NuxtLink :to="category === 1 ? `/trending/${data.pagination.currentPage + 1}`
+                : category === 2 ? `/popular/${data.pagination.currentPage + 1}`
+                    : category === 3 ? `/upcoming/${data.pagination.currentPage + 1}`
+                        : category === 4 ? `/favorite/${data.pagination.currentPage + 1}`
+                            : category === 5 ? `/movies/${data.pagination.currentPage + 1}` : '/'" class="flex 
+                            justify-center items-center text-dark bg-prime 
+                            outline-none rounded-sm w-28 gap-2 p-1 hover:bg-prime/85"
+                v-if="data.pagination.hasNextPage">
+                Next
+                <ChevronRightIcon size="1.2x" />
+            </NuxtLink>
+            <button type="button" class="flex justify-center items-center text-dark bg-prime/50 outline-none rounded-sm 
+            w-28 gap-2 p-1 hover:cursor-not-allowed" v-else>
+                Next
+                <ChevronRightIcon size="1.2x" />
+            </button>
         </div>
     </div>
 </template>

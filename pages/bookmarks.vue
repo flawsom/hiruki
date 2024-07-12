@@ -5,6 +5,6 @@ const bookmarks = useStorage("bookmarks", { data: [] });
 
 <template>
     <div class="space-y-8 m-4">
-        <Section :data="bookmarks" :category="6" :explorer="false" />
+        <Section :data="bookmarks" :category="6" :explorer="false" :pagination="false" />
     </div>
 </template>
