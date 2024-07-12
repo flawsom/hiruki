@@ -12,16 +12,18 @@ const clearBookmarks = () => {
         <div class="flex justify-between items-center">
             <p class="text-light text-xl font-bold uppercase">{{ category === 1 ? "Trending Now" : category === 2
                 ? "All Time Popular" : category === 3 ? "Upcoming Next Season" : category === 4 ? "Most Favorite" :
-                    category === 5 ? "Most Popular Movies" : category === 6 ? "My Bookmarks" : "Unknown" }}</p>
+                    category === 5 ? "Most Popular Movies" : category === 6 ? "My Bookmarks" :
+                        category === 7 ? "Search Results" : "Unknown" }}</p>
             <button type="button" @click="clearBookmarks" class="text-light text-base font-normal 
             hover:text-prime" v-if="category === 6">Clear All</button>
             <NuxtLink :to="category === 1 ? '/trending' : category === 2 ? '/popular' : category === 3
                 ? '/upcoming' : category === 4 ? '/favorite' : category === 5 ? '/movies' : '/'" class="text-light 
                 text-base font-normal hover:text-prime" v-if="explorer">View More</NuxtLink>
         </div>
-        <div :class="`flex justify-center items-center ${category === 6 ? 'h-72' : 'h-40'}`"
+        <div :class="`flex justify-center items-center ${category === 6 || 7 ? 'h-72' : 'h-44'}`"
             v-if="data.data.length < 1">
             <p class="text-prime text-xl font-semibold" v-if="category === 6">No Bookmarks</p>
+            <p class="text-prime text-xl font-semibold" v-else-if="category === 7">No Result</p>
             <p class="text-prime text-xl font-semibold" v-else>No Data</p>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2" v-else>
