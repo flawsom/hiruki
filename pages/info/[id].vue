@@ -43,8 +43,8 @@ const removeBookmark = () => {
             text-base font-medium text-center outline-none rounded-sm gap-2 p-2 hover:bg-prime/85" v-else>
                 <BookmarkIcon />Bookmark
             </button>
-            <NuxtLink :to="'/stream/' + data?.episodes.episodes[0].id" class="text-dark bg-prime text-base 
-                font-medium text-center outline-none rounded-sm w-full p-2 hover:bg-prime/85"
+            <NuxtLink :to="`/stream/${data?.info.id}/${data?.episodes.episodes[0].id}`" class="text-dark bg-prime 
+            text-base font-medium text-center outline-none rounded-sm w-full p-2 hover:bg-prime/85"
                 v-if="data?.episodes.episodes.length > 0">Watch Now</NuxtLink>
             <button type="button" class="text-dark bg-prime/50 text-base font-medium text-center outline-none 
                 rounded-sm w-full p-2 hover:cursor-not-allowed" v-else>Not Available</button>
@@ -65,8 +65,8 @@ const removeBookmark = () => {
             text-base font-medium text-center w-full outline-none rounded-sm gap-2 p-2 hover:bg-prime/85" v-else>
                 <BookmarkIcon />Bookmark
             </button>
-            <NuxtLink :to="'/stream/' + data?.episodes.episodes[0].id" class="text-dark bg-prime text-base 
-            font-medium text-center w-full outline-none rounded-sm p-2 hover:bg-prime/85"
+            <NuxtLink :to="`/stream/${data?.info.id}/${data?.episodes.episodes[0].id}`" class="text-dark bg-prime 
+            text-base font-medium text-center w-full outline-none rounded-sm p-2 hover:bg-prime/85"
                 v-if="data?.episodes.episodes.length > 0">Watch Now</NuxtLink>
             <button type="button" class="text-dark bg-prime/50 text-base font-medium text-center w-full 
             outline-none rounded-sm p-2 hover:cursor-not-allowed" v-else>Not Available</button>
@@ -138,7 +138,8 @@ const removeBookmark = () => {
                 <p class="text-light text-lg font-semibold">Episodes</p>
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 max-h-[310px] overflow-y-auto"
                     v-if="data?.episodes.episodes.length > 0">
-                    <NuxtLink v-for="episode in data?.episodes.episodes" :to="'/stream/' + episode.id"
+                    <NuxtLink v-for="episode in data?.episodes.episodes"
+                        :to="`/stream/${data?.info.id}/${episode.id}`"
                         class="flex items-start gap-2 rounded-sm hover:bg-prime/10">
                         <NuxtImg :src="data?.info.cover" :alt="data?.info.title" class="h-24 rounded-sm object-cover" />
                         <div class="flex flex-col gap-1 p-2">
