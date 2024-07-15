@@ -25,5 +25,11 @@ module.exports = {
             }
         }
     },
-    plugins: []
+    plugins: [require("vidstack/tailwind.cjs")(
+        {
+            selector: ".media-player",
+            prefix: "media",
+            webComponents: true
+        }
+    )]
 }

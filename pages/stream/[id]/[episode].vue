@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-import Artplayer from "artplayer";
-import Hls from "hls.js";
-import artplayerPluginHlsQuality from "artplayer-plugin-hls-quality";
+import { useStorage } from "@vueuse/core";
 
 const route = useRoute();
+const toast = useToast();
+const bookmarks = useStorage("bookmarks", { data: [] });
+
 const { data } = await useAsyncData("info", async () => {
     const [stream, download, info, episodes] = await Promise.all([
         await $fetch(`/api/stream?id=${route.params.episode}`),
@@ -14,43 +15,158 @@ const { data } = await useAsyncData("info", async () => {
     return { stream, download, info, episodes }
 });
 
-onMounted(() => {
-    new Artplayer({
-        container: "#player",
-        url: data.value?.stream.sources.default ? data.value?.stream.sources.default : data.value?.stream.sources.backup,
-        setting: true,
-        volume: 1,
-        fullscreen: true,
-        theme: "#ADC6FF",
-        plugins: [
-            artplayerPluginHlsQuality({
-                setting: true,
-                getResolution: (level: any) => level.height + "P",
-                auto: "Auto"
-            }),
-        ],
-        customType: {
-            m3u8: function playM3u8(video: any, url: string, art: any) {
-                if (Hls.isSupported()) {
-                    if (art.hls) art.hls.destroy();
-                    const hls = new Hls();
-                    hls.loadSource(url);
-                    hls.attachMedia(video);
-                    art.hls = hls;
-                    art.on("destroy", () => hls.destroy());
-                } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-                    video.src = url;
-                } else {
-                    art.notice.show = "Unsupported Playback Format (m3u8)";
-                }
-            }
-        }
+function isBookmarked() {
+    return bookmarks.value.data.find((item: any) => item.id == route.params.id) !== undefined
+}
+
+function onAddBookmark() {
+    const list: any = bookmarks.value
+    toast.add({ title: "Successfully Added!" });
+    list.data.push({
+        id: data.value?.info.id,
+        title: data.value?.info.title,
+        cover: data.value?.info.cover,
+        season: data.value?.info.season,
+        year: data.value?.info.year
     });
+}
+
+function onRemoveBookmark() {
+    const list = bookmarks.value;
+    toast.add({ title: "Successfully Removed!" });
+    const index = list.data.findIndex((item: any) => item.id == route.params.id);
+    list.data.splice(index, 1);
+}
+
+const ready = ref(false);
+const modal = ref(false);
+
+const items = [
+    {
+        key: "synopsis",
+        label: "Synopsis"
+    },
+    {
+        key: "info",
+        label: "Info"
+    },
+    {
+        key: "characters",
+        label: "Characters"
+    }
+];
+
+onMounted(() => {
+    ready.value = true
 });
 </script>
 
 <template>
-    <div class="flex justify-center items-center w-full">
-        <div id="player" class="w-full h-60 md:h-80 lg:h-[450px]" />
+    <div class="flex flex-col gap-2 m-4">
+        <Player :src="data?.stream.sources.default" />
+        <div class="flex justify-between items-center">
+            <UButton :to="data?.download.link" target="_blank" icon="i-heroicons-arrow-down-circle-20-solid"
+                label="Download" variant="soft" />
+            <UButton icon="i-heroicons-bars-3-16-solid" label="Episodes" variant="soft" @click="modal = true"
+                v-if="data?.episodes.episodes.length > 0" />
+        </div>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-[auto,1fr] gap-8 m-4">
+        <div class="hidden lg:flex flex-col gap-2">
+            <NuxtImg :src="data?.info.cover" :alt="data?.info.title" class="w-56 h-80 rounded-md object-cover" />
+            <UButton icon="i-heroicons-bookmark-solid" label="Bookmarked" variant="ghost" block
+                @click="onRemoveBookmark" v-if="isBookmarked()" />
+            <UButton icon="i-heroicons-bookmark" label="Bookmark" variant="ghost" block @click="onAddBookmark" v-else />
+            <UButton :to="`/stream/${route.params.id}/${data?.episodes.episodes[0].id}`"
+                icon="i-heroicons-play-16-solid" label="Watch Now" variant="soft" block
+                v-if="data?.episodes.episodes.length > 0" />
+            <UButton icon="i-heroicons-play-16-solid" label="Not Available" color="red" variant="soft" block disabled
+                v-else />
+        </div>
+        <div class="flex lg:hidden flex-col items-center gap-2">
+            <NuxtImg :src="data?.info.cover" :alt="data?.info.title"
+                class="w-40 h-60 md:w-48 md:h-72 rounded-md object-cover" />
+            <div class="flex flex-col justify-center items-center text-center">
+                <p class="text-base font-normal">{{ data?.info.season }} {{ data?.info.year }}</p>
+                <p class="text-2xl font-bold line-clamp-3">{{ data?.info.title }}</p>
+            </div>
+            <UButton icon="i-heroicons-bookmark-solid" label="Bookmarked" variant="ghost" block
+                @click="onRemoveBookmark" v-if="isBookmarked()" />
+            <UButton icon="i-heroicons-bookmark" label="Bookmark" variant="ghost" block @click="onAddBookmark" v-else />
+            <UButton :to="`/stream/${route.params.id}/${data?.episodes.episodes[0].id}`"
+                icon="i-heroicons-play-16-solid" label="Watch Now" variant="soft" block
+                v-if="data?.episodes.episodes.length > 0" />
+            <UButton icon="i-heroicons-play-16-solid" label="Not Available" color="red" variant="soft" block disabled
+                v-else />
+        </div>
+        <div class="flex flex-col gap-2">
+            <div class="hidden lg:flex flex-col">
+                <p class="text-base font-normal">{{ data?.info.season }} {{ data?.info.year }}</p>
+                <p class="text-2xl font-bold line-clamp-2">{{ data?.info.title }}</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <UButton v-for="genre in data?.info.genres" :label="genre" variant="soft" />
+            </div>
+            <UTabs :items="items" class="w-full">
+                <template #item="{ item }">
+                    <div v-if="item.key === 'synopsis'">
+                        <UCard>
+                            <div v-html="data?.info.description" class="text-base font-normal" />
+                        </UCard>
+                    </div>
+                    <div v-else-if="item.key === 'info'" class="space-y-2">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+                            <div class="space-y-2">
+                                <div>
+                                    <UAlert title="Format" :description="data?.info.format" v-if="data?.info.format" />
+                                    <UAlert title="Format" description="N/A" v-else />
+                                </div>
+                                <div>
+                                    <UAlert title="Status" :description="data?.info.status" />
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div>
+                                    <UAlert title="Score" :description="data?.info.score" v-if="data?.info.score" />
+                                    <UAlert title="Score" description="N/A" v-else />
+                                </div>
+                                <div>
+                                    <UAlert title="Episodes" :description="String(data?.info.episodes)"
+                                        v-if="data?.info.episodes" />
+                                    <UAlert title="Score" description="N/A" v-else />
+                                </div>
+                            </div>
+                        </div>
+                        <UAlert title="Studio" :description="data?.info.studio" v-if="data?.info.studio" />
+                        <UAlert title="Studio" description="N/A" v-else />
+                    </div>
+                    <div v-else-if="item.key === 'characters'" class="space-y-2">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-2" v-if="data?.info.characters.length > 0">
+                            <div v-for="character in data?.info.characters.slice(0, 9)">
+                                <UAlert :title="character.name"
+                                    :avatar="{ src: character.image, alt: character.name }" />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <UAlert title="Not Available" color="red" variant="soft" />
+                        </div>
+                    </div>
+                </template>
+            </UTabs>
+
+            <USlideover v-model="modal">
+                <div class="space-y-4 p-4 flex-1 overflow-y-auto h-full">
+                    <div class="flex justify-between items-center">
+                        <p class="text-xl font-bold">Episodes</p>
+                        <UButton icon="i-heroicons-x-mark-16-solid" variant="ghost" trailing @click="modal = false" />
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <UButton v-for="episode in data?.episodes.episodes"
+                            :to="`/stream/${route.params.id}/${episode.id}`" :label="`Episode ${episode.episode}`"
+                            variant="soft" block v-if="data?.episodes.episodes.length > 0" />
+                    </div>
+                </div>
+            </USlideover>
+        </div>
     </div>
 </template>

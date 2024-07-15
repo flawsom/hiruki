@@ -20,18 +20,15 @@ importers:
       '@vueuse/core':
         specifier: ^10.11.0
         version: 10.11.0(vue@3.4.30)
-      artplayer:
-        specifier: ^5.1.6
-        version: 5.1.6
-      artplayer-plugin-hls-quality:
-        specifier: ^2.0.0
-        version: 2.0.0
       hls.js:
         specifier: ^1.5.13
         version: 1.5.13
       nuxt:
         specifier: ^3.12.2
         version: 3.12.2(@opentelemetry/api@1.9.0)(@parcel/watcher@2.4.1)(@types/node@20.14.8)(encoding@0.1.13)(ioredis@5.4.1)(magicast@0.3.4)(rollup@4.18.0)(terser@5.31.1)(vite@5.3.1(@types/node@20.14.8)(terser@5.31.1))
+      vidstack:
+        specifier: ^1.11.29
+        version: 1.11.29
       vue:
         specifier: ^3.4.29
         version: 3.4.30
@@ -527,6 +524,15 @@ packages:
   '@fastify/busboy@2.1.1':
     resolution: {integrity: sha512-vBZP4NlzfOlerQTnba4aqZoMhE/a9HY7HRqoOPaETQcSQuWEIyZMHGfVu6w9wGtGK5fED5qRs2DteVCjOH60sA==}
     engines: {node: '>=14'}
+
+  '@floating-ui/core@1.6.4':
+    resolution: {integrity: sha512-a4IowK4QkXl4SCWTGUR0INAfEOX3wtsYw3rKK5InQEHMGObkR8Xk44qYQD9P4r6HHw0iIfK6GUKECmY8sTkqRA==}
+
+  '@floating-ui/dom@1.6.7':
+    resolution: {integrity: sha512-wmVfPG5o2xnKDU4jx/m4w5qva9FWHcnZ8BvzEe90D/RpwsJaTAVYPEPdQ8sbr/N8zZTAHlZUTQdqg8ZUbzHmng==}
+
+  '@floating-ui/utils@0.2.4':
+    resolution: {integrity: sha512-dWO2pw8hhi+WrXq1YJy2yCuWoL20PddgGaqTgVe4cOS9Q6qklXCiA1tJEqX6BEwRNSCP84/afac9hd4MS+zEUA==}
 
   '@grpc/grpc-js@1.10.9':
     resolution: {integrity: sha512-5tcgUctCG0qoNyfChZifz2tJqbRbXVO9J7X6duFcOjY3HUNCxg5D0ZCK7EP9vIcZ0zRpLU9bWkyCqVCLZ46IbQ==}
@@ -1206,6 +1212,9 @@ packages:
   '@types/shimmer@1.0.5':
     resolution: {integrity: sha512-9Hp0ObzwwO57DpLFF0InUjUm/II8GmKAvzbefxQTihCb7KI6yc9yzf0nLc4mVdby5N4DRCgQM2wCup9KTieeww==}
 
+  '@types/trusted-types@2.0.7':
+    resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
+
   '@types/web-bluetooth@0.0.20':
     resolution: {integrity: sha512-g9gZnnXVq7gM7v3tJCWV/qw7w+KeOlSHAhgF9RytFyifW6AF61hdT2ucrYhPq9hLs5JIryeupHV3qGk95dH9ow==}
 
@@ -1457,12 +1466,6 @@ packages:
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
-
-  artplayer-plugin-hls-quality@2.0.0:
-    resolution: {integrity: sha512-+/tiLXi2BNOuw7z2ayI6cYlZBZEP/ujS01bTtanRi2P0zl8wHafPEk0bAA8VbXxpP9gYT0/DjBIifNR9W0xqhA==}
-
-  artplayer@5.1.6:
-    resolution: {integrity: sha512-cqnVVLKCKWCryKl6Pmop50/Di9IQwOeNNQs5qWGzJDPiM0qTC7Q/Enusa+8JQid8p09fvp4Vc32ViSSYutdEeQ==}
 
   ast-kit@0.12.2:
     resolution: {integrity: sha512-es1zHFsnZ4Y4efz412nnrU3KvVAhgqy90a7Yt9Wpi5vQ3l4aYMOX0Qx4FD0elKr5ITEhiUGCSFcgGYf4YTuACg==}
@@ -2553,10 +2556,6 @@ packages:
     resolution: {integrity: sha512-iYSchDJ+liQ8iwbSI2QqsQOvqv58eJCEanyJPJi+Khyu8smkcKSFUCbPwzFcL7YVtZ6eONjqRX/38caJ7QjRAQ==}
     engines: {node: '>= 0.6'}
 
-  kind-of@6.0.3:
-    resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
-    engines: {node: '>=0.10.0'}
-
   kleur@3.0.3:
     resolution: {integrity: sha512-eTIzlVOSUR+JxdDFepEYcBMtZ9Qqdef+rnzWdRZuMbOywu5tO2w2N7rqjoANZ5k9vywhL6Br1VRjUIgTQx4E8w==}
     engines: {node: '>=6'}
@@ -2611,6 +2610,9 @@ packages:
   listhen@1.7.2:
     resolution: {integrity: sha512-7/HamOm5YD9Wb7CFgAZkKgVPA96WwhcTQoqtm2VTZGVbVVn3IWKRBTgrU7cchA3Q8k9iCsG8Osoi9GX4JsGM9g==}
     hasBin: true
+
+  lit-html@2.8.0:
+    resolution: {integrity: sha512-o9t+MQM3P4y7M7yNzqAyjp7z+mQGa4NS4CxiyLqFPyFWyc4O+nodLrkrxSaCTrla6M5YOLaT3RpbbqjszB5g3Q==}
 
   local-pkg@0.4.3:
     resolution: {integrity: sha512-SFppqq5p42fe2qcZQqqEOiVRXl+WCP1MdT6k7BDEW1j++sp5fIY+/fdRQitvKgB5BrBcmrs5m/L0v2FrU5MY1g==}
@@ -2684,6 +2686,10 @@ packages:
 
   mdn-data@2.0.30:
     resolution: {integrity: sha512-GaqWWShW4kv/G9IEucWScBx9G1/vsFZZJUO+tD26M8J8z3Kw5RDQjaoZe03YAClgeS/SWPOcb4nkFBTEi5DUEA==}
+
+  media-captions@1.0.3:
+    resolution: {integrity: sha512-y2Qi5rqjwgH97zoko1vzu5Q6nnS0KzEQSvd4NOjnFym9JqnFb5VSsUg21RNb5cQ/nhCFJ0wz/XK+2uMwFCr6TQ==}
+    engines: {node: '>=16'}
 
   media-typer@0.3.0:
     resolution: {integrity: sha512-dq+qelQ9akHpcOl/gUVRTxVIOkAJ1wR3QAvb4RsVjS8oVoFjDGTc679wJYmUmknUF5HwMLOgb5O+a3KxfWapPQ==}
@@ -3038,9 +3044,6 @@ packages:
   openapi-typescript@6.7.6:
     resolution: {integrity: sha512-c/hfooPx+RBIOPM09GSxABOZhYPblDoyaGhqBkD/59vtpN21jEuWKDlM0KYTvqJVlSYjKs0tBcIdeXKChlSPtw==}
     hasBin: true
-
-  option-validator@2.0.6:
-    resolution: {integrity: sha512-tmZDan2LRIRQyhUGvkff68/O0R8UmF+Btmiiz0SmSw2ng3CfPZB9wJlIjHpe/MKUZqyIZkVIXCrwr1tIN+0Dzg==}
 
   p-limit@3.1.0:
     resolution: {integrity: sha512-TYOanM3wGwNGsZN2cVTYPArw454xnXj5qmWF1bEoAc4+cU/ol7GVh7odevjp1FNHduHc3KZMcFduxU5Xc6uJRQ==}
@@ -3998,6 +4001,10 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
+  vidstack@1.11.29:
+    resolution: {integrity: sha512-s8zclEHiTFcqWrOgrFYGFlmdTZxE2fXIeHA+2lRlRMhj6+nREuA1cyhXvkgtPt9U+a0iJ6JJE/rljBSW6C7x3Q==}
+    engines: {node: '>=18'}
+
   vite-hot-client@0.2.3:
     resolution: {integrity: sha512-rOGAV7rUlUHX89fP2p2v0A2WWvV3QMX2UYq0fRqsWSvFvev4atHWqjwGoKaZT1VTKyLGk533ecu3eyd0o59CAg==}
     peerDependencies:
@@ -4641,6 +4648,17 @@ snapshots:
     optional: true
 
   '@fastify/busboy@2.1.1': {}
+
+  '@floating-ui/core@1.6.4':
+    dependencies:
+      '@floating-ui/utils': 0.2.4
+
+  '@floating-ui/dom@1.6.7':
+    dependencies:
+      '@floating-ui/core': 1.6.4
+      '@floating-ui/utils': 0.2.4
+
+  '@floating-ui/utils@0.2.4': {}
 
   '@grpc/grpc-js@1.10.9':
     dependencies:
@@ -5627,6 +5645,8 @@ snapshots:
 
   '@types/shimmer@1.0.5': {}
 
+  '@types/trusted-types@2.0.7': {}
+
   '@types/web-bluetooth@0.0.20': {}
 
   '@unhead/dom@1.9.14':
@@ -5943,12 +5963,6 @@ snapshots:
   arg@5.0.2: {}
 
   argparse@2.0.1: {}
-
-  artplayer-plugin-hls-quality@2.0.0: {}
-
-  artplayer@5.1.6:
-    dependencies:
-      option-validator: 2.0.6
 
   ast-kit@0.12.2:
     dependencies:
@@ -7105,8 +7119,6 @@ snapshots:
     dependencies:
       tsscmp: 1.0.6
 
-  kind-of@6.0.3: {}
-
   kleur@3.0.3: {}
 
   klona@2.0.6: {}
@@ -7203,6 +7215,10 @@ snapshots:
     transitivePeerDependencies:
       - uWebSockets.js
 
+  lit-html@2.8.0:
+    dependencies:
+      '@types/trusted-types': 2.0.7
+
   local-pkg@0.4.3: {}
 
   local-pkg@0.5.0:
@@ -7278,6 +7294,8 @@ snapshots:
   mdn-data@2.0.28: {}
 
   mdn-data@2.0.30: {}
+
+  media-captions@1.0.3: {}
 
   media-typer@0.3.0: {}
 
@@ -7804,10 +7822,6 @@ snapshots:
       supports-color: 9.4.0
       undici: 5.28.4
       yargs-parser: 21.1.1
-
-  option-validator@2.0.6:
-    dependencies:
-      kind-of: 6.0.3
 
   p-limit@3.1.0:
     dependencies:
@@ -8886,6 +8900,13 @@ snapshots:
   validate-npm-package-name@5.0.1: {}
 
   vary@1.1.2: {}
+
+  vidstack@1.11.29:
+    dependencies:
+      '@floating-ui/dom': 1.6.7
+      lit-html: 2.8.0
+      media-captions: 1.0.3
+      unplugin: 1.10.1
 
   vite-hot-client@0.2.3(vite@5.3.1(@types/node@20.14.8)(terser@5.31.1)):
     dependencies:
