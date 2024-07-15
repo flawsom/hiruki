@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 const { data } = await useAsyncData("explorer", async () => {
     const [trending, popular, upcoming, favorite, movies] = await Promise.all([
-        await $fetch("/api/trending?page=1&per=15"),
-        await $fetch("/api/popular?page=1&per=15"),
-        await $fetch("/api/upcoming?page=1&per=15"),
-        await $fetch("/api/favorite?page=1&per=15"),
-        await $fetch("/api/movies?page=1&per=15")
+        await $fetch("/api/trending?page=1&per=12"),
+        await $fetch("/api/popular?page=1&per=12"),
+        await $fetch("/api/upcoming?page=1&per=12"),
+        await $fetch("/api/favorite?page=1&per=12"),
+        await $fetch("/api/movies?page=1&per=12")
     ]);
     return { trending, popular, upcoming, favorite, movies }
 });

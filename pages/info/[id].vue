@@ -1,6 +1,10 @@
 <script lang="ts" setup>
 import { useStorage } from "@vueuse/core";
+
 const route = useRoute();
+const toast = useToast();
+const bookmarks = useStorage("bookmarks", { data: [] });
+
 const { data } = await useAsyncData("info", async () => {
     const [info, recommendations, episodes] = await Promise.all([
         await $fetch(`/api/info?id=${route.params.id}`),
@@ -9,12 +13,14 @@ const { data } = await useAsyncData("info", async () => {
     ]);
     return { info, recommendations, episodes }
 });
-const bookmarks = useStorage("bookmarks", { data: [] });
-const isBookmarked = () => {
+
+function isBookmarked() {
     return bookmarks.value.data.find((item: any) => item.id == route.params.id) !== undefined
 }
-const addBookmark = () => {
+
+function onAddBookmark() {
     const list: any = bookmarks.value
+    toast.add({ title: "Successfully Added!" });
     list.data.push({
         id: data.value?.info.id,
         title: data.value?.info.title,
@@ -23,155 +29,150 @@ const addBookmark = () => {
         year: data.value?.info.year
     });
 }
-const removeBookmark = () => {
+
+function onRemoveBookmark() {
     const list = bookmarks.value;
+    toast.add({ title: "Successfully Removed!" });
     const index = list.data.findIndex((item: any) => item.id == route.params.id);
     list.data.splice(index, 1);
 }
+
+const modal = ref(false);
+
+const items = [
+    {
+        key: "synopsis",
+        label: "Synopsis"
+    },
+    {
+        key: "info",
+        label: "Info"
+    },
+    {
+        key: "characters",
+        label: "Characters"
+    }
+];
 </script>
 
 <template>
     <div class="grid grid-cols-1 lg:grid-cols-[auto,1fr] gap-8 m-4">
         <div class="hidden lg:flex flex-col gap-2">
-            <img :src="data?.info.cover" :alt="data?.info.title" class="w-56 h-80 rounded-sm object-cover">
-            <button type="button" @click="removeBookmark" class="flex justify-center items-center text-dark bg-prime 
-            text-base font-medium text-center outline-none rounded-sm gap-2 p-2 hover:bg-prime/85"
-                v-if="isBookmarked()">
-                <BookmarkIcon />Bookmarked
-            </button>
-            <button type="button" @click="addBookmark" class="flex justify-center items-center text-dark bg-prime 
-            text-base font-medium text-center outline-none rounded-sm gap-2 p-2 hover:bg-prime/85" v-else>
-                <BookmarkIcon />Bookmark
-            </button>
-            <NuxtLink :to="`/stream/${data?.info.id}/${data?.episodes.episodes[0].id}`" class="text-dark bg-prime 
-            text-base font-medium text-center outline-none rounded-sm w-full p-2 hover:bg-prime/85"
-                v-if="data?.episodes.episodes.length > 0">Watch Now</NuxtLink>
-            <button type="button" class="text-dark bg-prime/50 text-base font-medium text-center outline-none 
-                rounded-sm w-full p-2 hover:cursor-not-allowed" v-else>Not Available</button>
+            <NuxtImg :src="data?.info.cover" :alt="data?.info.title" class="w-56 h-80 rounded-md object-cover" />
+            <UButton icon="i-heroicons-bookmark-solid" label="Bookmarked" variant="ghost" block
+                @click="onRemoveBookmark" v-if="isBookmarked()" />
+            <UButton icon="i-heroicons-bookmark" label="Bookmark" variant="ghost" block @click="onAddBookmark" v-else />
+            <UButton :to="`/stream/${route.params.id}/${data?.episodes.episodes[0].id}`"
+                icon="i-heroicons-play-16-solid" label="Watch Now" variant="soft" block
+                v-if="data?.episodes.episodes.length > 0" />
+            <UButton icon="i-heroicons-play-16-solid" label="Not Available" color="red" variant="soft" block disabled
+                v-else />
+            <UButton icon="i-heroicons-bars-3-16-solid" label="Episodes" variant="soft" block @click="modal = true"
+                v-if="data?.episodes.episodes.length > 0" />
         </div>
-        <div class="lg:hidden flex flex-col items-center gap-2">
-            <img :src="data?.info.cover" :alt="data?.info.title"
-                class="w-40 h-60 md:w-48 md:h-72 rounded-sm object-cover">
+        <div class="flex lg:hidden flex-col items-center gap-2">
+            <NuxtImg :src="data?.info.cover" :alt="data?.info.title"
+                class="w-40 h-60 md:w-48 md:h-72 rounded-md object-cover" />
             <div class="flex flex-col justify-center items-center text-center">
-                <p class="text-light text-base font-normal">{{ data?.info.season }} {{ data?.info.year }}</p>
-                <p class="text-light text-2xl font-bold line-clamp-3">{{ data?.info.title }}</p>
+                <p class="text-base font-normal">{{ data?.info.season }} {{ data?.info.year }}</p>
+                <p class="text-2xl font-bold line-clamp-3">{{ data?.info.title }}</p>
             </div>
-            <button type="button" @click="removeBookmark" class="flex justify-center items-center text-dark bg-prime 
-            text-base font-medium text-center w-full outline-none rounded-sm gap-2 p-2 hover:bg-prime/85"
-                v-if="isBookmarked()">
-                <BookmarkIcon />Bookmarked
-            </button>
-            <button type="button" @click="addBookmark" class="flex justify-center items-center text-dark bg-prime 
-            text-base font-medium text-center w-full outline-none rounded-sm gap-2 p-2 hover:bg-prime/85" v-else>
-                <BookmarkIcon />Bookmark
-            </button>
-            <NuxtLink :to="`/stream/${data?.info.id}/${data?.episodes.episodes[0].id}`" class="text-dark bg-prime 
-            text-base font-medium text-center w-full outline-none rounded-sm p-2 hover:bg-prime/85"
-                v-if="data?.episodes.episodes.length > 0">Watch Now</NuxtLink>
-            <button type="button" class="text-dark bg-prime/50 text-base font-medium text-center w-full 
-            outline-none rounded-sm p-2 hover:cursor-not-allowed" v-else>Not Available</button>
+            <UButton icon="i-heroicons-bookmark-solid" label="Bookmarked" variant="ghost" block
+                @click="onRemoveBookmark" v-if="isBookmarked()" />
+            <UButton icon="i-heroicons-bookmark" label="Bookmark" variant="ghost" block @click="onAddBookmark" v-else />
+            <UButton :to="`/stream/${route.params.id}/${data?.episodes.episodes[0].id}`"
+                icon="i-heroicons-play-16-solid" label="Watch Now" variant="soft" block
+                v-if="data?.episodes.episodes.length > 0" />
+            <UButton icon="i-heroicons-play-16-solid" label="Not Available" color="red" variant="soft" block disabled
+                v-else />
+            <UButton icon="i-heroicons-bars-3-16-solid" label="Episodes" variant="soft" block @click="modal = true"
+                v-if="data?.episodes.episodes.length > 0" />
         </div>
         <div class="flex flex-col gap-2">
             <div class="hidden lg:flex flex-col">
-                <p class="text-light text-base font-normal">{{ data?.info.season }} {{ data?.info.year }}</p>
-                <p class="text-light text-2xl font-bold line-clamp-2">{{ data?.info.title }}</p>
+                <p class="text-base font-normal">{{ data?.info.season }} {{ data?.info.year }}</p>
+                <p class="text-2xl font-bold line-clamp-2">{{ data?.info.title }}</p>
             </div>
             <div class="flex flex-wrap items-center gap-2">
-                <button type="button" class="text-dark bg-prime outline-none rounded-sm px-2"
-                    v-for="genre in data?.info.genres">{{ genre }}</button>
+                <UButton v-for="genre in data?.info.genres" :label="genre" variant="soft" />
             </div>
-            <div class="bg-prime/5 space-y-2 rounded-sm p-4">
-                <p class="text-light text-lg font-semibold">Synopsis</p>
-                <div v-html="data?.info.description" class="text-light/75 text-base font-normal" />
-            </div>
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
-                <div class="space-y-2">
-                    <div class="bg-prime/5 space-y-1 rounded-sm p-4">
-                        <p class="text-light text-lg font-semibold">Format</p>
-                        <p class="text-light/75 text-base font-normal" v-if="data?.info.format">
-                            {{ data?.info.format }}</p>
-                        <p class="text-light/75 text-base font-normal" v-else>N/A</p>
+            <UTabs :items="items" class="w-full">
+                <template #item="{ item }">
+                    <div v-if="item.key === 'synopsis'">
+                        <UCard>
+                            <div v-html="data?.info.description" class="text-base font-normal" />
+                        </UCard>
                     </div>
-                    <div class="bg-prime/5 space-y-1 rounded-sm p-4">
-                        <p class="text-light text-lg font-semibold">Status</p>
-                        <p class="text-light/75 text-base font-normal">{{ data?.info.status }}</p>
+                    <div v-else-if="item.key === 'info'" class="space-y-2">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
+                            <div class="space-y-2">
+                                <div>
+                                    <UAlert title="Format" :description="data?.info.format" v-if="data?.info.format" />
+                                    <UAlert title="Format" description="N/A" v-else />
+                                </div>
+                                <div>
+                                    <UAlert title="Status" :description="data?.info.status" />
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div>
+                                    <UAlert title="Score" :description="data?.info.score" v-if="data?.info.score" />
+                                    <UAlert title="Score" description="N/A" v-else />
+                                </div>
+                                <div>
+                                    <UAlert title="Episodes" :description="String(data?.info.episodes)"
+                                        v-if="data?.info.episodes" />
+                                    <UAlert title="Score" description="N/A" v-else />
+                                </div>
+                            </div>
+                        </div>
+                        <UAlert title="Studio" :description="data?.info.studio" v-if="data?.info.studio" />
+                        <UAlert title="Studio" description="N/A" v-else />
                     </div>
-                </div>
-                <div class="space-y-2">
-                    <div class="bg-prime/5 space-y-1 rounded-sm p-4">
-                        <p class="text-light text-lg font-semibold">Score</p>
-                        <p class="text-light/75 text-base font-normal" v-if="data?.info.score">{{ data?.info.score }}
-                        </p>
-                        <p class="text-light/75 text-base font-normal" v-else>N/A</p>
-                    </div>
-                    <div class="bg-prime/5 space-y-1 rounded-sm p-4">
-                        <p class="text-light text-lg font-semibold">Episodes</p>
-                        <p class="text-light/75 text-base font-normal" v-if="data?.info.episodes">
-                            {{ data?.info.episodes }} Episode(s)</p>
-                        <p class="text-light/75 text-base font-normal" v-else>N/A</p>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-prime/5 space-y-1 rounded-sm p-4">
-                <p class="text-light text-lg font-semibold">Studio</p>
-                <p class="text-light/75 text-base font-normal" v-if="data?.info.studio">{{ data?.info.studio }}</p>
-                <p class="text-light/75 text-base font-normal" v-else>N/A</p>
-            </div>
-            <div class="bg-prime/5 space-y-2 rounded-sm p-4">
-                <p class="text-light text-lg font-semibold">Characters</p>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-2" v-if="data?.info.characters.length > 0">
-                    <div v-for="character in data?.info.characters.slice(0, 9)"
-                        class="flex items-center gap-2 rounded-sm">
-                        <NuxtImg :src="character.image" :alt="character.name"
-                            class="w-24 h-24 rounded-full object-cover" />
-                        <div class="flex flex-1 flex-col gap-1 p-2 overflow-hidden">
-                            <p class="text-light text-base font-normal line-clamp-2">{{ character.name }}</p>
-                            <p class="text-dark bg-prime w-fit outline-none rounded-sm px-2">{{ character.role }}</p>
+                    <div v-else-if="item.key === 'characters'" class="space-y-2">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-2" v-if="data?.info.characters.length > 0">
+                            <div v-for="character in data?.info.characters.slice(0, 9)">
+                                <UAlert :title="character.name"
+                                    :avatar="{ src: character.image, alt: character.name }" />
+                            </div>
+                        </div>
+                        <div v-else>
+                            <UAlert title="Not Available" color="red" variant="soft" />
                         </div>
                     </div>
+                </template>
+            </UTabs>
+
+            <USlideover v-model="modal">
+                <div class="space-y-4 p-4 flex-1 overflow-y-auto h-full">
+                    <div class="flex justify-between items-center">
+                        <p class="text-xl font-bold">Episodes</p>
+                        <UButton icon="i-heroicons-x-mark-16-solid" variant="ghost" trailing @click="modal = false" />
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <UButton v-for="episode in data?.episodes.episodes"
+                            :to="`/stream/${route.params.id}/${episode.id}`" :label="`Episode ${episode.episode}`"
+                            variant="soft" block v-if="data?.episodes.episodes.length > 0" />
+                    </div>
                 </div>
-                <div class="flex justify-center items-center h-32" v-else>
-                    <p class="text-prime text-xl font-semibold">Not Available</p>
-                </div>
-            </div>
-            <div class="bg-prime/5 space-y-2 rounded-sm p-4">
-                <p class="text-light text-lg font-semibold">Episodes</p>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-2 max-h-[310px] overflow-y-auto"
-                    v-if="data?.episodes.episodes.length > 0">
-                    <NuxtLink v-for="episode in data?.episodes.episodes"
-                        :to="`/stream/${data?.info.id}/${episode.id}`"
-                        class="flex items-start gap-2 rounded-sm hover:bg-prime/10">
-                        <NuxtImg :src="data?.info.cover" :alt="data?.info.title" class="h-24 rounded-sm object-cover" />
-                        <div class="flex flex-col gap-1 p-2">
-                            <p class="text-light text-base font-normal line-clamp-2">{{ data?.info.title }}</p>
-                            <p class="text-dark bg-prime w-fit outline-none rounded-sm px-2">
-                                Episode {{ episode.episode }}</p>
-                        </div>
-                    </NuxtLink>
-                </div>
-                <div class="flex justify-center items-center h-32" v-else>
-                    <p class="text-prime text-xl font-semibold">Not Available</p>
-                </div>
-            </div>
+            </USlideover>
         </div>
     </div>
     <div class="space-y-4 m-4" v-if="data?.recommendations.recommendations.length > 0">
         <div class="flex justify-between items-center">
             <p class="text-light text-xl font-bold uppercase">Recommendations</p>
         </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2">
-            <NuxtLink v-for="anime in data?.recommendations.recommendations.slice(0, 8)" :to="'/info/' + anime.id"
-                class="relative flex flex-col group gap-2">
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+            <ULink v-for="anime in data?.recommendations.recommendations.slice(0, 6)" :to="`/info/${anime.id}`"
+                class="relative flex flex-col overflow-hidden rounded-md group gap-2">
                 <NuxtImg :src="anime.cover" :alt="anime.title" placeholder
-                    class="w-full h-full rounded-sm object-cover" />
-                <div class="bg-gradient-to-t from-dark to-transparent absolute inset-0 
-                    group-hover:from-dark/95" />
+                    class="w-full h-full rounded-md object-cover transition-transform group-hover:scale-110" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent rounded-sm" />
                 <div class="absolute bottom-0 left-0 p-2">
-                    <p class="text-light text-sm font-medium line-clamp-2 group-hover:text-prime">
-                        {{ anime.title }}</p>
-                    <p class="text-light/75 text-sm font-normal">{{ anime.season }} {{ anime.year }}</p>
+                    <p class="text-base font-medium line-clamp-2">{{ anime.title }}</p>
+                    <p class="text-base font-normal">{{ anime.season }} {{ anime.year }}</p>
                 </div>
-            </NuxtLink>
+            </ULink>
         </div>
     </div>
 </template>
