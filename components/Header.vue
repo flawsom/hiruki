@@ -1,60 +1,53 @@
 <script lang="ts" setup>
-const mstate = ref(false);
-const sstate = ref(false);
-const query = ref(null);
-const handleMenuOpen = () => {
-    mstate.value = !mstate.value
-}
-const handleSearchOpen = () => {
-    sstate.value = !sstate.value
-}
-const handleNavigation = (path: string) => {
-    navigateTo(path);
-    mstate.value = false
-    sstate.value = false
-}
-const handleSearchQuery = () => {
-    if (query.value === null || "") {
-        return null
-    } else {
-        navigateTo(`/search/${query.value}`);
-        mstate.value = false
-        sstate.value = false
-        query.value = null
+import type { FormSubmitEvent } from "#ui/types";
+
+const modal = ref(false);
+const state = reactive({ query: undefined });
+const items = [
+    [{ to: "/explore", label: "Explore", icon: "i-heroicons-fire" }],
+    [{ to: "/bookmarks", label: "Bookmarks", icon: "i-heroicons-bookmark" }]
+];
+
+function onSearchSubmit({ data }: FormSubmitEvent<any>) {
+    if (state.query !== undefined) {
+        modal.value = false
+        navigateTo(`/search/${data.query}`);
+        state.query = undefined
     }
 }
 </script>
 
 <template>
+    <!-- HEADER NAVBAR -->
     <div class="flex justify-between items-center p-4">
-        <NuxtLink to="/" class="text-prime text-4xl font-extrabold hover:text-prime/85">Hiruki</NuxtLink>
+        <ULink to="/" active-class="text-primary text-4xl font-bold" inactive-class="text-4xl font-bold">Hiruki</ULink>
         <div class="flex items-center gap-4">
-            <div class="hidden md:flex justify-center items-center gap-4">
-                <NuxtLink to="/explore" class="text-light hover:text-prime">Explore</NuxtLink>
-                <NuxtLink to="/bookmarks" class="text-light hover:text-prime">Bookmarks</NuxtLink>
+            <div class="hidden md:flex items-center gap-2">
+                <div class="flex items-center">
+                    <UButton to="/explore" icon="i-heroicons-fire" label="Explore" variant="ghost" />
+                    <UButton to="/bookmarks" icon="i-heroicons-bookmark" label="Bookmarks" variant="ghost" />
+                </div>
+                <UButton icon="i-heroicons-magnifying-glass-16-solid" @click="modal = true" />
             </div>
-            <button type="button" @click="handleSearchOpen" class="text-dark bg-prime outline-none rounded-md p-2 
-            hover:bg-prime/85">
-                <SearchIcon size="1.2x" />
-            </button>
-            <button type="button" @click="handleMenuOpen" class="flex md:hidden text-dark bg-prime outline-none 
-            rounded-md p-2 hover:bg-prime/85">
-                <MenuIcon size="1.2x" />
-            </button>
+            <div class="flex md:hidden items-center gap-4">
+                <UButton icon="i-heroicons-magnifying-glass-16-solid" @click="modal = true" />
+                <UDropdown :items="items">
+                    <UButton icon="i-heroicons-bars-3-16-solid" />
+                </UDropdown>
+            </div>
         </div>
     </div>
-    <div class="bg-prime/5 flex items-center gap-2 p-2 md:mx-4" v-if="sstate">
-        <input type="text" placeholder="Search..." class="text-light bg-prime/5 outline-none rounded-sm 
-        w-full py-1.5 px-3" @keyup.enter="handleSearchQuery" v-model="query">
-        <button type="button" @click="handleSearchQuery" class="text-dark bg-prime outline-none rounded-sm p-2 
-        hover:bg-prime/85">
-            <SearchIcon size="1.2x" />
-        </button>
-    </div>
-    <div class="bg-prime/5 flex flex-col items-center gap-2 p-2" v-if="mstate">
-        <button type="button" @click="handleNavigation('/explore')" class="text-light text-lg font-normal 
-        text-center rounded-sm w-full p-2 hover:bg-prime/5">Explore</button>
-        <button type="button" @click="handleNavigation('/bookmarks')" class="text-light text-lg font-normal 
-        text-center rounded-sm w-full p-2 hover:bg-prime/5">Bookmarks</button>
-    </div>
+
+    <!-- SEARCH MODAL -->
+    <UModal v-model="modal">
+        <UForm :state="state" class="flex items-center gap-4 p-4" @submit="onSearchSubmit">
+            <UButtonGroup orientation="horizontal" class="w-full" size="xl">
+                <UFormGroup name="query" class="w-full" required>
+                    <UInput v-model="state.query" placeholder="Search..." variant="none"
+                        icon="i-heroicons-magnifying-glass-16-solid" />
+                </UFormGroup>
+                <UButton type="submit" icon="i-heroicons-magnifying-glass-16-solid" />
+            </UButtonGroup>
+        </UForm>
+    </UModal>
 </template>
