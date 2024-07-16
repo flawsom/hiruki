@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import { useStorage } from "@vueuse/core";
+import { ref, onMounted, computed } from 'vue';
+import { useRoute, useAsyncData } from '#app'; // Ensure to import necessary functions
+import { useToast, useStorage } from '@vueuse/core';
+import { UButton, UAlert, UAvatar, UCard, UTabs, NuxtImg, Player } from 'your-component-library'; // Update with actual component imports
 
 const route = useRoute();
 const toast = useToast();
@@ -54,6 +57,12 @@ const items = [
         label: "Characters"
     }
 ];
+
+const episodes = computed(() => data.value?.episodes.episodes || []);
+const currentEpisodeIndex = computed(() => episodes.value.findIndex(e => e.id === route.params.episode));
+
+const prevEpisode = computed(() => episodes.value[currentEpisodeIndex.value - 1]);
+const nextEpisode = computed(() => episodes.value[currentEpisodeIndex.value + 1]);
 
 onMounted(() => {
     ready.value = true;
@@ -132,7 +141,7 @@ onMounted(() => {
                                 <div>
                                     <UAlert title="Episodes" :description="String(data?.info.episodes)"
                                         v-if="data?.info.episodes" />
-                                    <UAlert title="Score" description="N/A" v-else />
+                                    <UAlert title="Episodes" description="N/A" v-else />
                                 </div>
                             </div>
                         </div>
@@ -156,5 +165,11 @@ onMounted(() => {
                 </template>
             </UTabs>
         </div>
+    </div>
+    <div class="flex justify-between items-center mt-4">
+        <UButton :to="prevEpisode ? `/stream/${route.params.id}/${prevEpisode.id}` : '#'`"
+            label="Previous Episode" variant="outline" size="lg" :disabled="!prevEpisode" />
+        <UButton :to="nextEpisode ? `/stream/${route.params.id}/${nextEpisode.id}` : '#'`"
+            label="Next Episode" variant="outline" size="lg" :disabled="!nextEpisode" />
     </div>
 </template>
