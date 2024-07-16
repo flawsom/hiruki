@@ -2,10 +2,10 @@
 </script>
 
 <template>
-    <UCard>
+    <UContainer class="p-4">
         <div class="flex flex-col md:flex-row justify-between md:items-center gap-4">
             <div>
-                <ULink to="/" active-class="text-primary text-4xl font-bold" inactive-class="text-4xl font-bold">
+                <ULink to="/" class="text-4xl font-bold">
                     Hiruki</ULink>
                 <p class="md:w-96">This site does not store any files on our server, we
                     only linked to the media which is hosted on 3rd party services.</p>
@@ -16,5 +16,5 @@
                     label="Bug Report" variant="ghost" />
             </div>
         </div>
-    </UCard>
+    </UContainer>
 </template>
