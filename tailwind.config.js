@@ -7,23 +7,7 @@ module.exports = {
         "./pages/**/*.vue"
     ],
     theme: {
-        extend: {
-            colors: {
-                jade: {
-                    50: "#EFFeF7",
-                    100: "#DAFEEF",
-                    200: "#B8FADD",
-                    300: "#81F4C3",
-                    400: "#43E5A0",
-                    500: "#1ACD81",
-                    600: "#0FA968",
-                    700: "#108554",
-                    800: "#126945",
-                    900: "#11563A",
-                    950: "#03301F",
-                }
-            }
-        }
+        extend: {}
     },
     plugins: [require("vidstack/tailwind.cjs")(
         {
