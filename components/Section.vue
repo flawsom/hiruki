@@ -22,7 +22,7 @@ function onClearAll() {
                 v-if="category === 6 && data.data.length > 0" />
             <UButton :to="category === 1 ? '/trending/1' : category === 2 ? '/popular/1' : category === 3
                 ? '/upcoming/1' : category === 4 ? '/favorite/1' : category === 5 ? '/movies/1' : '/'"
-                icon="i-heroicons-paper-airplane-20-solid" label="View More" variant="ghost" v-if="explorer" />
+                icon="i-heroicons-plus-16-solid" label="View More" variant="link" v-if="explorer" />
         </div>
         <div :class="`flex justify-center items-center ${category === 6 || 7 ? 'h-80' : 'h-44'}`"
             v-if="data.data.length < 1">
@@ -38,10 +38,10 @@ function onClearAll() {
                 </div>
                 <p class="font-medium truncate">{{ anime.title }}</p>
                 <div class="flex items-center gap-2">
-
-                    <UButton icon="i-heroicons-calendar-16-solid" :label="String(anime.year)" variant="soft" size="xs" />
-                    <UButton icon="i-heroicons-star-16-solid"
-                        :label="anime.score ? anime.score : 'N/A'" variant="soft" size="xs" />
+                    <UButton icon="i-heroicons-calendar-16-solid" :label="String(anime.year)" color="gray"
+                        variant="solid" size="xs" />
+                    <UButton icon="i-heroicons-star-16-solid" :label="anime.score ? anime.score : 'N/A'" color="gray"
+                        variant="solid" size="xs" />
                 </div>
             </ULink>
         </div>
@@ -52,7 +52,7 @@ function onClearAll() {
                 : category === 3 ? `/upcoming/${data.pagination.currentPage - 1}`
                     : category === 4 ? `/favorite/${data.pagination.currentPage - 1}`
                         : category === 5 ? `/movies/${data.pagination.currentPage - 1}` : '/'"
-            icon="i-heroicons-arrow-small-left-20-solid" label="Previous" variant="ghost"
+            icon="i-heroicons-arrow-small-left-20-solid" label="Previous" variant="solid"
             :disabled="data.pagination.currentPage <= 1" />
         <p class="text-base font-medium">Page {{ data.pagination.currentPage }}</p>
         <UButton :to="category === 1 ? `/trending/${data.pagination.currentPage + 1}`
@@ -60,7 +60,7 @@ function onClearAll() {
                 : category === 3 ? `/upcoming/${data.pagination.currentPage + 1}`
                     : category === 4 ? `/favorite/${data.pagination.currentPage + 1}`
                         : category === 5 ? `/movies/${data.pagination.currentPage + 1}` : '/'"
-            icon="i-heroicons-arrow-small-right-20-solid" label="Next" variant="ghost" trailing
+            icon="i-heroicons-arrow-small-right-20-solid" label="Next" variant="solid" trailing
             :disabled="!data.pagination.hasNextPage" />
     </div>
 </template>

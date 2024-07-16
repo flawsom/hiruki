@@ -50,17 +50,17 @@ onUnmounted(() => {
         <div class="flex items-center gap-4">
             <div class="hidden md:flex items-center gap-2">
                 <div class="flex items-center">
-                    <UButton to="/explore" icon="i-heroicons-fire" label="Explore" variant="ghost" />
-                    <UButton to="/bookmarks" icon="i-heroicons-bookmark" label="Bookmarks" variant="ghost" />
+                    <UButton to="/explore" icon="i-heroicons-fire" label="Explore" variant="link" />
+                    <UButton to="/bookmarks" icon="i-heroicons-bookmark" label="Bookmarks" variant="link" />
                 </div>
-                <UButton icon="i-heroicons-magnifying-glass-16-solid" variant="soft" size="lg" @click="modal = true" />
+                <UButton icon="i-heroicons-magnifying-glass-16-solid" variant="solid" size="lg" @click="modal = true" />
                 <Mode />
             </div>
             <div class="flex md:hidden items-center gap-4">
-                <UButton icon="i-heroicons-magnifying-glass-16-solid" variant="soft" size="lg" @click="modal = true" />
+                <UButton icon="i-heroicons-magnifying-glass-16-solid" variant="solid" size="lg" @click="modal = true" />
                 <Mode />
                 <UDropdown :items="items">
-                    <UButton icon="i-heroicons-bars-3-16-solid" variant="soft" size="lg" />
+                    <UButton icon="i-heroicons-bars-3-16-solid" variant="solid" size="lg" />
                 </UDropdown>
             </div>
         </div>
@@ -74,7 +74,7 @@ onUnmounted(() => {
                     <UInput v-model="state.query" placeholder="Search..." variant="none"
                         icon="i-heroicons-magnifying-glass-16-solid" />
                 </UFormGroup>
-                <UButton type="submit" icon="i-heroicons-magnifying-glass-16-solid" variant="soft" />
+                <UButton type="submit" icon="i-heroicons-magnifying-glass-16-solid" variant="solid" />
             </UButtonGroup>
         </UForm>
     </UModal>
