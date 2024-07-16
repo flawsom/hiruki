@@ -132,8 +132,11 @@ const items = [
                     <div v-else-if="item.key === 'characters'" class="space-y-2">
                         <div class="grid grid-cols-1 lg:grid-cols-3 gap-2" v-if="data?.info.characters.length > 0">
                             <div v-for="character in data?.info.characters.slice(0, 9)">
-                                <UAlert :title="character.name"
-                                    :avatar="{ src: character.image, alt: character.name }" />
+                                <UAlert :title="character.name" :avatar="{ src: character.image, alt: character.name }">
+                                    <template #avatar="{ avatar }">
+                                        <UAvatar v-bind="avatar" size="xl" img-class="object-cover" />
+                                    </template>
+                                </UAlert>
                             </div>
                         </div>
                         <div v-else>
