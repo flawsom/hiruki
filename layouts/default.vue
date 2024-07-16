@@ -4,7 +4,7 @@ useStorage("bookmarks", { data: [] });
 </script>
 
 <template>
-    <NuxtLoadingIndicator color="#1ACD81" />
+    <NuxtLoadingIndicator color="#FFFFFF" />
     <Header />
     <div class="space-y-8 transition-all select-none">
         <slot />

@@ -175,7 +175,8 @@ const items = [
                 <p class="font-medium truncate">{{ anime.title }}</p>
                 <div class="flex items-center gap-2">
 
-                    <UButton icon="i-heroicons-calendar-16-solid" :label="anime.year" variant="soft" size="xs" />
+                    <UButton icon="i-heroicons-calendar-16-solid" :label="String(anime.year)" variant="soft"
+                        size="xs" />
                     <UButton icon="i-heroicons-star-16-solid" :label="anime.score ? anime.score : 'N/A'" variant="soft"
                         size="xs" />
                 </div>
