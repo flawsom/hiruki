@@ -62,13 +62,26 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-2 m-4">
-        <Player :src="data?.stream.sources.default" />
-        <div class="flex justify-between items-center">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr,auto] gap-4 m-4">
+        <div class="flex flex-col gap-2">
+            <Player :src="data?.stream.sources.default" />
             <UButton :to="data?.download.link" target="_blank" icon="i-heroicons-arrow-down-circle-20-solid"
-                label="Download" variant="soft" />
-            <UButton icon="i-heroicons-bars-3-16-solid" label="Episodes" variant="soft" @click="modal = true"
-                v-if="data?.episodes.episodes.length > 0" />
+                label="Download" variant="soft" size="lg" block />
+        </div>
+        <div class="flex flex-col w-full md:w-72 gap-2">
+            <div class="flex justify-start items-center">
+                <p class="text-xl font-bold">Episodes</p>
+            </div>
+            <div class="flex flex-col gap-2" v-for="episode in data?.episodes.episodes.slice(0, 9)"
+                v-if="data?.episodes.episodes.length > 0">
+                <UButton :to="`/stream/${route.params.id}/${episode.id}`" :label="`Episode ${episode.episode}`"
+                    variant="soft" size="lg" block v-if="data?.episodes.episodes.length > 0" />
+            </div>
+            <div class="space-y-2" v-if="data?.episodes.episodes.length > 9">
+                <UDivider icon="i-heroicons-ellipsis-horizontal-20-solid" />
+                <UButton icon="i-heroicons-bars-3-16-solid" label="All Episodes" variant="soft" @click="modal = true"
+                    size="lg" block v-if="data?.episodes.episodes.length > 0" />
+            </div>
         </div>
     </div>
     <div class="grid grid-cols-1 lg:grid-cols-[auto,1fr] gap-8 m-4">

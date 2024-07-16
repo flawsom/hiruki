@@ -5,7 +5,7 @@ const { src } = defineProps(["src"]);
 
 <template>
     <ClientOnly>
-        <media-player :src="src" class="w-full md:h-80 lg:h-[500px]">
+        <media-player :src="src" class="w-full md:h-80 lg:h-[550px]">
             <media-provider />
             <media-video-layout />
         </media-player>
