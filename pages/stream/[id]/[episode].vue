@@ -1,3 +1,102 @@
+<script lang="ts" setup>
+import { useStorage } from "@vueuse/core";
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import { useToast } from 'vue-toastification';
+
+interface Bookmark {
+    id: string;
+    title: string;
+    cover: string;
+    season: string;
+    year: string;
+}
+
+interface Data {
+    stream: any;
+    download: any;
+    info: {
+        id: string;
+        title: string;
+        cover: string;
+        season: string;
+        year: string;
+        genres: string[];
+        description: string;
+        format: string;
+        status: string;
+        score: string;
+        episodes: number;
+        studio: string;
+        characters: { name: string, image: string }[];
+    };
+    episodes: { episodes: { id: string, episode: number }[] };
+}
+
+const route = useRoute();
+const toast = useToast();
+const bookmarks = useStorage<{ data: Bookmark[] }>("bookmarks", { data: [] });
+
+const { data, error } = await useAsyncData<Data>("stream", async () => {
+    try {
+        const [stream, download, info, episodes] = await Promise.all([
+            $fetch(`/api/stream?id=${route.params.episode}`),
+            $fetch(`/api/download?id=${route.params.episode}`),
+            $fetch(`/api/info?id=${route.params.id}`),
+            $fetch(`/api/episodes?id=${route.params.id}`)
+        ]);
+        return { stream, download, info, episodes };
+    } catch (e) {
+        console.error(e);
+        return null;
+    }
+});
+
+function isBookmarked() {
+    return bookmarks.value.data.find((item: Bookmark) => item.id == route.params.id) !== undefined;
+}
+
+function onAddBookmark() {
+    const list = bookmarks.value;
+    toast.add({ title: "Successfully Added!" });
+    list.data.push({
+        id: data.value?.info.id,
+        title: data.value?.info.title,
+        cover: data.value?.info.cover,
+        season: data.value?.info.season,
+        year: data.value?.info.year
+    });
+}
+
+function onRemoveBookmark() {
+    const list = bookmarks.value;
+    toast.add({ title: "Successfully Removed!" });
+    const index = list.data.findIndex((item: Bookmark) => item.id == route.params.id);
+    list.data.splice(index, 1);
+}
+
+const ready = ref(false);
+
+const items = [
+    {
+        key: "synopsis",
+        label: "Synopsis"
+    },
+    {
+        key: "info",
+        label: "Info"
+    },
+    {
+        key: "characters",
+        label: "Characters"
+    }
+];
+
+onMounted(() => {
+    ready.value = true;
+});
+</script>
+
 <template>
     <div class="grid grid-cols-1 lg:grid-cols-[1fr,auto] gap-4 m-4">
         <div class="flex flex-col gap-2">
@@ -9,7 +108,7 @@
             <div class="flex justify-start items-center">
                 <p class="text-xl font-bold">Episodes</p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-2">
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                 <UButton v-for="episode in data?.episodes.episodes"
                     :key="episode.id"
                     :to="`/stream/${route.params.id}/${episode.id}`"
