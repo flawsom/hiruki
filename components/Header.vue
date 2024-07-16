@@ -1,7 +1,11 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from "#ui/types";
 
+const route = useRoute();
+const router = useRouter();
+
 const scrolled = ref(false);
+const path = ref("/");
 const modal = ref(false);
 const state = reactive({ query: undefined });
 const items = [
@@ -22,6 +26,9 @@ function onSearchSubmit({ data }: FormSubmitEvent<any>) {
 }
 
 onMounted(() => {
+    watch(() => route.path, () => {
+        path.value = route.path
+    });
     window.addEventListener("scroll", onPageScroll);
 });
 
@@ -34,7 +41,12 @@ onUnmounted(() => {
     <!-- HEADER NAVBAR -->
     <div :class="{ 'bg-gray backdrop-filter backdrop-blur-lg bg-opacity-30': scrolled }"
         class="sticky top-0 z-10 flex justify-between items-center py-2 px-4">
-        <ULink to="/" class="text-primary text-4xl font-bold">Hiruki</ULink>
+        <ULink to="/" class="text-primary text-4xl font-bold" v-if="path === '/'">Hiruki</ULink>
+        <div class="flex items-center gap-4" v-else>
+            <UButton icon="i-heroicons-arrow-left-20-solid" color="gray" variant="ghost" size="lg"
+                @click="router.back()" />
+            <UButton to="/" icon="i-heroicons-home-solid" color="gray" variant="ghost" size="lg" />
+        </div>
         <div class="flex items-center gap-4">
             <div class="hidden md:flex items-center gap-2">
                 <div class="flex items-center">
