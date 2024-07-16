@@ -5,7 +5,7 @@
     <div class="space-y-4 m-4">
         <p class="text-3xl font-bold">DMCA</p>
         <div class="space-y-2">
-            <p class="text-base font-normal">Hiruki.xyz is committed to respecting the intellectual
+            <p class="text-base font-normal">Ani.MoM is committed to respecting the intellectual
                 property rights of others and complying with the Digital Millennium Copyright Act (DMCA).
                 We take copyright infringement seriously and will respond to notices of
                 alleged copyright infringement that comply with the DMCA and any other applicable laws.</p>
@@ -16,11 +16,12 @@
                 delayed response due to the complaint not being filed properly.</p>
         </div>
         <p class="text-3xl font-bold">Disclaimer</p>
-        <p class="text-base font-normal">None of the files listed on Hiruki.xyz are hosted on our servers.
-            All links point to content hosted on third-party websites. Hiruki.xyz does not accept responsibility
+        <p class="text-base font-normal">None of the files listed on Ani.MoM are hosted on our servers.
+            All links point to content hosted on third-party websites. Ani.MoM
+            does not accept responsibility
             for content hosted on third-party websites and has no involvement in the downloading/uploading of movies.
             We only post links that are available on the internet. If you believe that any content on our website
             infringes upon your intellectual property rights and you hold the copyright for that content,
-            please report it to hiruki@mail.com and the content will be immediately removed.</p>
+            please report it to dmca@ani.mom and the content will be immediately removed.</p>
     </div>
 </template>
