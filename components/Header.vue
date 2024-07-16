@@ -42,9 +42,11 @@ onUnmounted(() => {
                     <UButton to="/bookmarks" icon="i-heroicons-bookmark" label="Bookmarks" variant="ghost" />
                 </div>
                 <UButton icon="i-heroicons-magnifying-glass-16-solid" variant="soft" size="lg" @click="modal = true" />
+                <Mode />
             </div>
             <div class="flex md:hidden items-center gap-4">
                 <UButton icon="i-heroicons-magnifying-glass-16-solid" variant="soft" size="lg" @click="modal = true" />
+                <Mode />
                 <UDropdown :items="items">
                     <UButton icon="i-heroicons-bars-3-16-solid" variant="soft" size="lg" />
                 </UDropdown>

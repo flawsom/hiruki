@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     vite: { plugins: [vidstack({ include: /player\// })] },
     devtools: { enabled: false },
     googleFonts: { families: { Outfit: "100..900" } },
+    colorMode: { preference: "dark" },
     runtimeConfig: {
         API: process.env.API_URL
     }
