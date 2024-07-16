@@ -1,12 +1,17 @@
 <script lang="ts" setup>
 import type { FormSubmitEvent } from "#ui/types";
 
+const scrolled = ref(false);
 const modal = ref(false);
 const state = reactive({ query: undefined });
 const items = [
     [{ to: "/explore", label: "Explore", icon: "i-heroicons-fire" }],
     [{ to: "/bookmarks", label: "Bookmarks", icon: "i-heroicons-bookmark" }]
 ];
+
+function onPageScroll() {
+    scrolled.value = window.scrollY > 0
+}
 
 function onSearchSubmit({ data }: FormSubmitEvent<any>) {
     if (state.query !== undefined) {
@@ -15,24 +20,33 @@ function onSearchSubmit({ data }: FormSubmitEvent<any>) {
         state.query = undefined
     }
 }
+
+onMounted(() => {
+    window.addEventListener("scroll", onPageScroll);
+});
+
+onUnmounted(() => {
+    window.removeEventListener("scroll", onPageScroll);
+});
 </script>
 
 <template>
     <!-- HEADER NAVBAR -->
-    <div class="flex justify-between items-center p-4">
-        <ULink to="/" active-class="text-primary text-4xl font-bold" inactive-class="text-4xl font-bold">Hiruki</ULink>
+    <div :class="{ 'bg-gray backdrop-filter backdrop-blur-lg bg-opacity-30': scrolled }"
+        class="sticky top-0 z-10 flex justify-between items-center py-2 px-4">
+        <ULink to="/" class="text-primary text-4xl font-bold">Hiruki</ULink>
         <div class="flex items-center gap-4">
             <div class="hidden md:flex items-center gap-2">
                 <div class="flex items-center">
                     <UButton to="/explore" icon="i-heroicons-fire" label="Explore" variant="ghost" />
                     <UButton to="/bookmarks" icon="i-heroicons-bookmark" label="Bookmarks" variant="ghost" />
                 </div>
-                <UButton icon="i-heroicons-magnifying-glass-16-solid" @click="modal = true" />
+                <UButton icon="i-heroicons-magnifying-glass-16-solid" variant="soft" size="lg" @click="modal = true" />
             </div>
             <div class="flex md:hidden items-center gap-4">
-                <UButton icon="i-heroicons-magnifying-glass-16-solid" @click="modal = true" />
+                <UButton icon="i-heroicons-magnifying-glass-16-solid" variant="soft" size="lg" @click="modal = true" />
                 <UDropdown :items="items">
-                    <UButton icon="i-heroicons-bars-3-16-solid" />
+                    <UButton icon="i-heroicons-bars-3-16-solid" variant="soft" size="lg" />
                 </UDropdown>
             </div>
         </div>
@@ -46,7 +60,7 @@ function onSearchSubmit({ data }: FormSubmitEvent<any>) {
                     <UInput v-model="state.query" placeholder="Search..." variant="none"
                         icon="i-heroicons-magnifying-glass-16-solid" />
                 </UFormGroup>
-                <UButton type="submit" icon="i-heroicons-magnifying-glass-16-solid" />
+                <UButton type="submit" icon="i-heroicons-magnifying-glass-16-solid" variant="soft" />
             </UButtonGroup>
         </UForm>
     </UModal>
