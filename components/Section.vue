@@ -19,7 +19,7 @@ function onClearAll() {
                     category === 5 ? "Most Popular Movies" : category === 6 ? "My Bookmarks" :
                         category === 7 ? "Search Results" : "Unknown" }}</p>
             <UButton icon="i-heroicons-trash" label="Clear All" variant="ghost" @click="onClearAll"
-                v-if="category === 6" />
+                v-if="category === 6 && data.data.length > 0" />
             <UButton :to="category === 1 ? '/trending/1' : category === 2 ? '/popular/1' : category === 3
                 ? '/upcoming/1' : category === 4 ? '/favorite/1' : category === 5 ? '/movies/1' : '/'"
                 icon="i-heroicons-paper-airplane-20-solid" label="View More" variant="ghost" v-if="explorer" />
