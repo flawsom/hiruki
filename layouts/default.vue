@@ -5,8 +5,8 @@ useStorage("bookmarks", { data: [] });
 
 <template>
     <NuxtLoadingIndicator color="#4F46E5" />
-    <Header />
-    <div class="space-y-8 transition-all select-none">
+    <div class="font-outfit select-none">
+        <Header />
         <slot />
         <Footer />
     </div>
@@ -14,7 +14,5 @@ useStorage("bookmarks", { data: [] });
 </template>
 
 <style>
-* {
-    font-family: "Outfit", sans-serif;
-}
+::-webkit-scrollbar { @apply w-0 }
 </style>

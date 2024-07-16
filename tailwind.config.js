@@ -7,7 +7,11 @@ module.exports = {
         "./pages/**/*.vue"
     ],
     theme: {
-        extend: {}
+        extend: {
+            fontFamily: {
+                outfit: ["Outfit", "sans-serif"]
+            }
+        }
     },
     plugins: [require("vidstack/tailwind.cjs")(
         {
