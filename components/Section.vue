@@ -31,14 +31,17 @@ function onClearAll() {
             <p class="text-xl font-semibold" v-else>No Data</p>
         </div>
         <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2" v-else>
-            <ULink v-for="anime in data.data" :to="`/info/${anime.id}`"
-                class="relative flex flex-col overflow-hidden rounded-md group gap-2">
-                <NuxtImg :src="anime.cover" :alt="anime.title" placeholder
-                    class="w-full h-full rounded-md object-cover transition-transform group-hover:scale-110" />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent rounded-sm" />
-                <div class="absolute bottom-0 left-0 p-2">
-                    <p class="text-base font-medium line-clamp-2">{{ anime.title }}</p>
-                    <p class="text-base font-normal">{{ anime.season }} {{ anime.year }}</p>
+            <ULink v-for="anime in data.data" :to="`/info/${anime.id}`" class="flex flex-col relative rounded-md gap-2">
+                <div class="w-full h-full rounded-md overflow-hidden">
+                    <NuxtImg :src="anime.cover" :alt="anime.title" placeholder
+                        class="w-full h-full rounded-md object-cover transition-transform hover:scale-110" />
+                </div>
+                <p class="font-medium truncate">{{ anime.title }}</p>
+                <div class="flex items-center gap-2">
+
+                    <UButton icon="i-heroicons-calendar-16-solid" :label="anime.year" variant="soft" size="xs" />
+                    <UButton icon="i-heroicons-star-16-solid"
+                        :label="anime.score ? anime.score : 'N/A'" variant="soft" size="xs" />
                 </div>
             </ULink>
         </div>
