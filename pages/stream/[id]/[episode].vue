@@ -1,65 +1,3 @@
-<script lang="ts" setup>
-import { useStorage } from "@vueuse/core";
-
-const route = useRoute();
-const toast = useToast();
-const bookmarks = useStorage("bookmarks", { data: [] });
-
-const { data } = await useAsyncData("stream", async () => {
-    const [stream, download, info, episodes] = await Promise.all([
-        await $fetch(`/api/stream?id=${route.params.episode}`),
-        await $fetch(`/api/download?id=${route.params.episode}`),
-        await $fetch(`/api/info?id=${route.params.id}`),
-        await $fetch(`/api/episodes?id=${route.params.id}`)
-    ]);
-    return { stream, download, info, episodes }
-});
-
-function isBookmarked() {
-    return bookmarks.value.data.find((item: any) => item.id == route.params.id) !== undefined;
-}
-
-function onAddBookmark() {
-    const list: any = bookmarks.value;
-    toast.add({ title: "Successfully Added!" });
-    list.data.push({
-        id: data.value?.info.id,
-        title: data.value?.info.title,
-        cover: data.value?.info.cover,
-        season: data.value?.info.season,
-        year: data.value?.info.year
-    });
-}
-
-function onRemoveBookmark() {
-    const list = bookmarks.value;
-    toast.add({ title: "Successfully Removed!" });
-    const index = list.data.findIndex((item: any) => item.id == route.params.id);
-    list.data.splice(index, 1);
-}
-
-const ready = ref(false);
-
-const items = [
-    {
-        key: "synopsis",
-        label: "Synopsis"
-    },
-    {
-        key: "info",
-        label: "Info"
-    },
-    {
-        key: "characters",
-        label: "Characters"
-    }
-];
-
-onMounted(() => {
-    ready.value = true;
-});
-</script>
-
 <template>
     <div class="grid grid-cols-1 lg:grid-cols-[1fr,auto] gap-4 m-4">
         <div class="flex flex-col gap-2">
@@ -71,9 +9,11 @@ onMounted(() => {
             <div class="flex justify-start items-center">
                 <p class="text-xl font-bold">Episodes</p>
             </div>
-            <div class="flex flex-col gap-2" v-for="episode in data?.episodes.episodes"
-                v-if="data?.episodes.episodes.length > 0">
-                <UButton :to="`/stream/${route.params.id}/${episode.id}`" :label="`Episode ${episode.episode}`"
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 lg:grid-cols-10 gap-2">
+                <UButton v-for="episode in data?.episodes.episodes"
+                    :key="episode.id"
+                    :to="`/stream/${route.params.id}/${episode.id}`"
+                    :label="`Episode ${episode.episode}`"
                     variant="soft" size="lg" block />
             </div>
         </div>
