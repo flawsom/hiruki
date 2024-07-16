@@ -71,7 +71,7 @@ onMounted(() => {
             <div class="flex justify-start items-center">
                 <p class="text-xl font-bold">Episodes</p>
             </div>
-            <div class="flex flex-col gap-2" v-for="episode in data?.episodes.episodes"
+            <div class="flex flex-row gap-2 flex-wrap" v-for="episode in data?.episodes.episodes"
                 v-if="data?.episodes.episodes.length > 0">
                 <UButton :to="`/stream/${route.params.id}/${episode.id}`" :label="`Episode ${episode.episode}`"
                     variant="soft" size="lg" block />
